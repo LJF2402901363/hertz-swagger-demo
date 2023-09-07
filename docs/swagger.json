@@ -1,0 +1,377 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "用户测试hertz框架集成go swagger组件.",
+        "title": "测试 hertz集成swagger API组件",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger_demo.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8888",
+    "basePath": "/api/v1",
+    "paths": {
+        "/user/add": {
+            "post": {
+                "description": "1.如果用户名不符合规范，则禁止新增该用户\n2.如果用户名已存在，那么新增用户失败",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "新增用户信息",
+                "parameters": [
+                    {
+                        "description": "新增用户请求参数",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.AddUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/delete": {
+            "delete": {
+                "description": "1.如果用户名不符合规范，则删除失败\n2.如果用户名已存在，那么可以删除该用户",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "根据用户ID删除用户信息",
+                "parameters": [
+                    {
+                        "description": "删除用户请求参数",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.DeleteUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-any"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/get": {
+            "get": {
+                "description": "1.如果用户名不存在，那么提示用户该用户不存在\n2.如果密码不正常那么提示用户密码不正确。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "根据用户名和用户密码获取用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-types_GetUserRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/get/:id": {
+            "get": {
+                "description": "如果用户名不存在，那么返回空信息；如果用户存在那么返回具体信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "根据用户ID获取用户信息",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户ID",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户密码",
+                        "name": "password",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/types.UserDetailsReq"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/types.BaseRes-error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "types.AddUserReq": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "description": "用户年龄，选填",
+                    "type": "integer"
+                },
+                "description": {
+                    "description": "用户描述，选填",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "用户名,必填",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "用户密码，必填",
+                    "type": "string"
+                }
+            }
+        },
+        "types.BaseRes-any": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "0成功，1失败",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "响应数据"
+                },
+                "msg": {
+                    "description": "响应信息",
+                    "type": "string"
+                }
+            }
+        },
+        "types.BaseRes-error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "0成功，1失败",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "响应数据"
+                },
+                "msg": {
+                    "description": "响应信息",
+                    "type": "string"
+                }
+            }
+        },
+        "types.BaseRes-types_GetUserRes": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "0成功，1失败",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "响应数据",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/types.GetUserRes"
+                        }
+                    ]
+                },
+                "msg": {
+                    "description": "响应信息",
+                    "type": "string"
+                }
+            }
+        },
+        "types.DeleteUserReq": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "types.GetUserRes": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "description": "用户年龄",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "用户名",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserDetailsReq": {
+            "type": "object",
+            "properties": {
+                "age": {
+                    "description": "用户年龄,必填",
+                    "type": "string"
+                },
+                "details": {
+                    "description": "用户详细，选填",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "用户名，必填",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}

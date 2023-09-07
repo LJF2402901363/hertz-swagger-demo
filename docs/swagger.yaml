@@ -1,0 +1,259 @@
+basePath: /api/v1
+definitions:
+  types.AddUserReq:
+    properties:
+      age:
+        description: 用户年龄，选填
+        type: integer
+      description:
+        description: 用户描述，选填
+        type: string
+      name:
+        description: 用户名,必填
+        type: string
+      password:
+        description: 用户密码，必填
+        type: string
+    type: object
+  types.BaseRes-any:
+    properties:
+      code:
+        description: 0成功，1失败
+        type: integer
+      data:
+        description: 响应数据
+      msg:
+        description: 响应信息
+        type: string
+    type: object
+  types.BaseRes-error:
+    properties:
+      code:
+        description: 0成功，1失败
+        type: integer
+      data:
+        description: 响应数据
+      msg:
+        description: 响应信息
+        type: string
+    type: object
+  types.BaseRes-types_GetUserRes:
+    properties:
+      code:
+        description: 0成功，1失败
+        type: integer
+      data:
+        allOf:
+        - $ref: '#/definitions/types.GetUserRes'
+        description: 响应数据
+      msg:
+        description: 响应信息
+        type: string
+    type: object
+  types.DeleteUserReq:
+    properties:
+      user_id:
+        type: string
+    type: object
+  types.GetUserRes:
+    properties:
+      age:
+        description: 用户年龄
+        type: integer
+      id:
+        description: 用户ID
+        type: integer
+      name:
+        description: 用户名
+        type: string
+      password:
+        description: 用户密码
+        type: string
+    type: object
+  types.UserDetailsReq:
+    properties:
+      age:
+        description: 用户年龄,必填
+        type: string
+      details:
+        description: 用户详细，选填
+        type: string
+      name:
+        description: 用户名，必填
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8888
+info:
+  contact:
+    email: support@swagger_demo.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: 用户测试hertz框架集成go swagger组件.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: 测试 hertz集成swagger API组件
+  version: "1.0"
+paths:
+  /user/add:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        1.如果用户名不符合规范，则禁止新增该用户
+        2.如果用户名已存在，那么新增用户失败
+      parameters:
+      - description: 新增用户请求参数
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/types.AddUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.BaseRes-any'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+      summary: 新增用户信息
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: |-
+        1.如果用户名不符合规范，则删除失败
+        2.如果用户名已存在，那么可以删除该用户
+      parameters:
+      - description: 删除用户请求参数
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/types.DeleteUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.BaseRes-any'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+      summary: 根据用户ID删除用户信息
+  /user/get:
+    get:
+      consumes:
+      - application/json
+      description: |-
+        1.如果用户名不存在，那么提示用户该用户不存在
+        2.如果密码不正常那么提示用户密码不正确。
+      parameters:
+      - description: 用户名
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: 用户密码
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.BaseRes-types_GetUserRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+      summary: 根据用户名和用户密码获取用户信息
+  /user/get/:id:
+    get:
+      consumes:
+      - application/json
+      description: 如果用户名不存在，那么返回空信息；如果用户存在那么返回具体信息
+      parameters:
+      - description: 用户ID
+        in: query
+        name: user_id
+        required: true
+        type: string
+      - description: 用户密码
+        in: query
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/types.UserDetailsReq'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/types.BaseRes-error'
+      summary: 根据用户ID获取用户信息
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
